@@ -1,8 +1,10 @@
 <?php
-class User {
-	
+
+class User
+{
+
     private $conn;
- 
+
     public $id;
     public $username;
     public $password;
@@ -11,185 +13,182 @@ class User {
     public $sesso;
     public $eta;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
-    public function setId($id_par) {
+
+    public function setId($id_par)
+    {
         $this->id = $id_par;
     }
-    public function getUsername() {
+
+    public function getUsername()
+    {
         return $this->username;
     }
-    public function setUsername($username_par) {
+
+    public function setUsername($username_par)
+    {
         $this->username = $username_par;
     }
-    public function getPassword() {
+
+    public function getPassword()
+    {
         return $this->password;
     }
-    public function setPassword($password_par) {
+
+    public function setPassword($password_par)
+    {
         $this->password = $password_par;
     }
-    public function getNome(){
+
+    public function getNome()
+    {
         return $this->nome;
     }
-    public function setNome($nome_par) {
+
+    public function setNome($nome_par)
+    {
         $this->nome = $nome_par;
     }
-    public function getCognome(){
+
+    public function getCognome()
+    {
         return $this->cognome;
     }
-    public function setCognome($cognome_par) {
+
+    public function setCognome($cognome_par)
+    {
         $this->cognome = $cognome_par;
     }
-    public function getSesso(){
+
+    public function getSesso()
+    {
         return $this->sesso;
     }
-    public function setSesso($sesso_par) {
+
+    public function setSesso($sesso_par)
+    {
         $this->sesso = $sesso_par;
     }
-    public function getEta(){
+
+    public function getEta()
+    {
         return $this->eta;
     }
-    public function setEta($eta_par) {
+
+    public function setEta($eta_par)
+    {
         $this->eta = $eta_par;
     }
 
-	// servizio di lettura di tutti i prodotti
-	function read() {
-		// estraggo tutti i prodotti 
-		$query = "SELECT * FROM prodotti JOIN categorie ON prodotti.cat_id = categorie.idcat ORDER BY prodotti.nome;";
-		// preparo la query
-		$stmt = $this->conn->prepare($query); 
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query (in questo caso un recordset)
 
-		return $stmt; 
-	}
+    function read()
+    {
+        $query = "SELECT * FROM users";
+        // query preparation
+        $stmt = $this->conn->prepare($query);
+        // query execution
+        $stmt->execute();
 
-	// servizio di lettura dei dati di un prodotto, dato il suo id
-	function readOne() {
-		// estraggo il prodotto con l'id indicato
-		$query = "SELECT * FROM prodotti JOIN categorie ON prodotti.cat_id = categorie.idcat WHERE prodotti.id = ?";
-		// preparo la query
-		$stmt = $this->conn->prepare($query);
-		// invio il valore per il parametro
-		$stmt->bindParam(1, $this->id);
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query (in questo caso un recordset con un solo elemento)
+        return $stmt;
+    }
 
-		// leggo la prima (e unica) riga del risultato della query
-		$row = $stmt->fetch(PDO::FETCH_ASSOC); // la funzione fetch (libreria PDO) con parametro PDO::FETCH_ASSOC invocata su un PDOStatement, restituisce un record ($row), in particolare un array le cui chiavi sono i nomi delle colonne della tabella 
- 
-		if ($row) {
-			// inserisco i valori nelle variabili d'istanza 
-			$this->name = $row['nome'];
-			$this->price = $row['prezzo'];
-			$this->description = $row['descrizione'];
-			$this->category_id = $row['cat_id'];
-			$this->category_name = $row['nomecat'];
-		}
-		else {
-			// se non trovo il prodotto, imposto i valori delle variabili d'istanza a null
-			$this->name = null;
-			$this->price = null;
-			$this->description = null;
-			$this->category_id = null;
-			$this->category_name = null;
-		}
-		
-		// la funzione readOne non restituisce un risultato, bensì modifica l'oggetto su cui viene invocata (cioè il prodotto)
-	}
 
-	// servizio di inserimento di un nuovo prodotto
-	function create() {
-		// inserisco il nuovo prodotto
-		$query = "INSERT INTO prodotti SET
-				  nome=:name, prezzo=:price, descrizione=:description, cat_id=:category_id";
-		// preparo la query
-		$stmt = $this->conn->prepare($query);
+    function readOne()
+    {
+        $query = "SELECT * FROM users WHERE users.id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
 
-		// invio i valori per i parametri (NB i valori del nuovo prodotto sono nelle variabili d'istanza!!)
-		$stmt->bindParam(":name", $this->name);
-		$stmt->bindParam(":price", $this->price);
-		$stmt->bindParam(":description", $this->description);
-		$stmt->bindParam(":category_id", $this->category_id);
- 
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		return $stmt;		
-	}
+        if ($row) {
+            $this->username = $row['username'];
+            $this->password = $row['password'];
+            $this->nome = $row['nome'];
+            $this->cognome = $row['cognome'];
+            $this->sesso = $row['sesso'];
+            $this->eta = $row['eta'];
+        } else {
+            $this->username = null;
+            $this->password = null;
+            $this->nome = null;
+            $this->cognome = null;
+            $this->sesso = null;
+            $this->eta = null;
+        }
+    }
 
-	// servizio di aggiornamento dei dati di un prodotto
-	function update() {
-		// aggiorno i dati del prodotto con l'id indicato
-		$query = "UPDATE prodotti SET
-					nome = :n,
-					prezzo = :p,
-					descrizione = :d,
-					cat_id = :c_id
+
+    function create()
+    {
+        $query = "INSERT INTO users SET
+				  username=:username, password=:password, nome=:nome, cognome=:cognome, sesso=:sesso eta:=eta";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":username", $this->username);
+        $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":nome", $this->nome);
+        $stmt->bindParam(":cognome", $this->cognome);
+        $stmt->bindParam(":sesso", $this->sesso);
+        $stmt->bindParam(":eta", $this->eta);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+
+    function update()
+    {
+        $query = "UPDATE users SET
+					username =: un,
+					password =: p,
+					nome =: n,
+					cognome =: c,
+                    sesso = :s,
+                    eta =: e
 					WHERE
 					id = :i";
-	
-		// preparo la query
-		$stmt = $this->conn->prepare($query);
- 
-		// invio i valori per i parametri (NB i nuovi valori del prodotto sono nelle variabili d'istanza!!)
-		$stmt->bindParam(':n', $this->name);
-		$stmt->bindParam(':p', $this->price);
-		$stmt->bindParam(':d', $this->description);
-		$stmt->bindParam(':c_id', $this->category_id);
-		$stmt->bindParam(':i', $this->id);
- 
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query
 
-		return $stmt;
-	}
+        $stmt = $this->conn->prepare($query);
 
-	// servizio di cancellazione di un prodotto
-	function delete() {
-		// cancello il prodotto con l'id indicato
-		$query = "DELETE FROM prodotti WHERE id = ?";
-	
-		// preparo la query
-		$stmt = $this->conn->prepare($query);
-	
-		// invio il valore per il parametro
-		$stmt->bindParam(1, $this->id);
+        $stmt->bindParam(':un', $this->username);
+        $stmt->bindParam(':p', $this->password);
+        $stmt->bindParam(':n', $this->nome);
+        $stmt->bindParam(':c', $this->cognome);
+        $stmt->bindParam(':s', $this->sesso);
+        $stmt->bindParam(':e', $this->eta);
 
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query
+        $stmt->bindParam(':i', $this->id);
 
-		return $stmt;
-	}
+        $stmt->execute();
 
-	// servizio di ricerca prodotti per keyword
-	function search($keywords) {
-		// cerco i prodotti 
-		$query = "SELECT * FROM prodotti JOIN categorie ON prodotti.cat_id = categorie.idcat
-				  WHERE prodotti.nome LIKE ? OR prodotti.descrizione LIKE ? OR categorie.nomecat LIKE ?
-				  ORDER BY prodotti.nome;";
-		
-		// preparo la query
-		$stmt = $this->conn->prepare($query); 
+        return $stmt;
+    }
 
-		// aggiungo % prima e dopo le keywords per estrarre i testi che CONTENGONO le keywords (rif. SQL)
-		$keywords = "%{$keywords}%"; 
-	
-		// invio i valori per i parametri
-		$stmt->bindParam(1, $keywords);
-		$stmt->bindParam(2, $keywords);
-		$stmt->bindParam(3, $keywords);
- 
-		// eseguo la query
-		$stmt->execute(); // NB $stmt conterrà il risultato dell'esecuzione della query (in questo caso un recordset)
-	
-		return $stmt;
-	}	
+
+    function delete()
+    {
+        $query = "DELETE FROM users WHERE id = ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(1, $this->id);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
+
 ?>
