@@ -13,9 +13,14 @@ class User
     public $sesso;
     public $eta;
 
+    public $image;
+    public $iscrizione;
+
     public function __construct($db)
     {
         $this->conn = $db;
+        $this->image = "/assets/images/user.png";
+        $this->iscrizione = date("Y-m-d H:i:s");
     }
 
     public function getId()
@@ -100,38 +105,54 @@ class User
         return $stmt;
     }
 
-
-    function readOne()
+    function readByAge()
     {
-        $query = "SELECT * FROM users WHERE users.id = ?";
+        $query = "SELECT * FROM users WHERE users.eta = ?";
+
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(1, $this->eta);
         $stmt->execute();
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row) {
-            $this->username = $row['username'];
-            $this->password = $row['password'];
-            $this->nome = $row['nome'];
-            $this->cognome = $row['cognome'];
-            $this->sesso = $row['sesso'];
-            $this->eta = $row['eta'];
-        } else {
-            $this->username = null;
-            $this->password = null;
-            $this->nome = null;
-            $this->cognome = null;
-            $this->sesso = null;
-            $this->eta = null;
-        }
+        return $stmt;
     }
 
+    function readByUsername()
+    {
+        $query = "SELECT * FROM users WHERE users.username = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->username);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    function readByNome()
+    {
+        $query = "SELECT * FROM users WHERE users.nome = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->nome);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    function readByCognome()
+    {
+        $query = "SELECT * FROM users WHERE users.cognome = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->cognome);
+        $stmt->execute();
+
+        return $stmt;
+    }
 
     function create()
     {
         $query = "INSERT INTO users SET
-				  username=:username, password=:password, nome=:nome, cognome=:cognome, sesso=:sesso eta:=eta";
+				  username=:username, password=:password, nome=:nome, cognome=:cognome, sesso=:sesso, eta=:eta, image=:image, iscrizione=:iscrizione";
 
         $stmt = $this->conn->prepare($query);
 
@@ -141,22 +162,25 @@ class User
         $stmt->bindParam(":cognome", $this->cognome);
         $stmt->bindParam(":sesso", $this->sesso);
         $stmt->bindParam(":eta", $this->eta);
+        $stmt->bindParam(":image", $this->image);
+        $stmt->bindParam(":iscrizione", $this->iscrizione);
 
         $stmt->execute();
 
         return $stmt;
     }
 
-
     function update()
     {
         $query = "UPDATE users SET
-					username =: un,
-					password =: p,
-					nome =: n,
-					cognome =: c,
+					username = :un,
+					password = :p,
+					nome = :n,
+					cognome = :c,
                     sesso = :s,
-                    eta =: e
+                    eta = :e,
+                    image = :image,
+                    iscrizione = :iscrizione
 					WHERE
 					id = :i";
 
@@ -168,14 +192,13 @@ class User
         $stmt->bindParam(':c', $this->cognome);
         $stmt->bindParam(':s', $this->sesso);
         $stmt->bindParam(':e', $this->eta);
-
         $stmt->bindParam(':i', $this->id);
-
+        $stmt->bindParam(":image", $this->image);
+        $stmt->bindParam(":iscrizione", $this->iscrizione);
         $stmt->execute();
 
         return $stmt;
     }
-
 
     function delete()
     {
@@ -184,6 +207,17 @@ class User
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(1, $this->id);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    function deleteAll()
+    {
+        $query = "DELETE FROM users";
+
+        $stmt = $this->conn->prepare($query);
 
         $stmt->execute();
 

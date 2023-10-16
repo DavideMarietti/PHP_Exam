@@ -2,17 +2,6 @@ version: '3.8'
 
 services:
 
-  php-apache-environment:
-    #image: php:8.0-apache
-    build: .
-    container_name: php-apache
-    depends_on:
-      - db
-    volumes:
-      - C:\Users\david\Desktop\Master_Full_Stack\PHP\exam\serverPHP:/var/www/html/
-    ports:
-      - "3000:80"
-
   db:
     image: mysql
     container_name: db
@@ -22,8 +11,20 @@ services:
       MYSQL_DATABASE: MY_DATABASE
       MYSQL_USER: MYSQL_USER
       MYSQL_PASSWORD: MYSQL_PASSWORD
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
       - "3306:3306"
+
+  php-apache-environment:
+    image: php-apache:latest
+    container_name: php-apache
+    depends_on:
+      - db
+    volumes:
+      - C:\Users\david\Desktop\Master_Full_Stack\PHP\exam\serverPHP:/var/www/html/
+    ports:
+      - "3000:80"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

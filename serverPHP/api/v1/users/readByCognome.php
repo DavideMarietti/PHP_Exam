@@ -1,22 +1,25 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET");
 
-include_once '../../dataManager/Database.php';
-include_once '../../dataManager/User.php';
+include_once '../../../dataManager/Database.php';
+include_once '../../../dataManager/User.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $user = new User($db);
 
-$stmt = $user->read();
+
+$cognome_toRead = isset($_GET['cognome']) ? $_GET['cognome'] : die();
+$user->setCognome($cognome_toRead);
+
+$stmt = $user->readByCognome();
 
 if ($stmt) {
     $users_list = array();
-    $users_list["users"] = array();
 
-    var_dump($stmt);
     foreach ($stmt as $row) {
         $user_obj = array(
             "id" => $row['id'],
@@ -25,18 +28,19 @@ if ($stmt) {
             "nome" => $row['nome'],
             "cognome" => $row['cognome'],
             "sesso" => $row['sesso'],
-            "eta" => $row['eta']
+            "eta" => $row['eta'],
+            "image" => $row['image'],
+            "iscrizione" => $row['iscrizione']
         );
 
-        array_push($users_list["users"], $user_obj);
+        array_push($users_list, $user_obj);
     }
-    http_response_code(200);
 
+    http_response_code(200);
     echo json_encode($users_list);
-} else {
+}
+else {
     http_response_code(404);
-    echo json_encode(array("message" => "Users found"));
+    echo json_encode(array("message" => "Product does not exist"));
 }
 ?>
-
-<p><?= $stmt?></p>
