@@ -1,1 +1,1 @@
-<p>eeee</p>
+<p>Il server REST API è in ascolto. Interroga gli endpoints documentati.</p>
