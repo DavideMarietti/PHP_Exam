@@ -10,6 +10,6 @@ Repository for the PHP exam.
 NOTE:
 * XAMPP is not required to run this project.
 * The REST API server written in PHP listens on port 3000 (http://localhost:3000).
-* The phpMyAdmin service is available on port 3001 (http://localhost:3001) and can be accessed using MYSQL_USER as username, MYSQL_PASSWORD as username. The database is automatically initialized when the corrispondent container is started thanks to the dump.sql file.
+* The phpMyAdmin service is available on port 3001 (http://localhost:3001) and can be accessed using MYSQL_USER as username, MYSQL_PASSWORD as password. The database is automatically initialized when the corrispondent container is started thanks to the dump.sql file.
 * There is a bind-mount attached to the php-apache-environment container to allow live updates in development (you don't have built a image when changes in the src code occure).
 * Link to the REST API documentation: https://documenter.getpostman.com/view/20410203/2s9YR83Cd6.
