@@ -1,5 +1,7 @@
 # PHP_Exam
-Repository for the PHP exam. **This project is dockerized**, to use it:
+Repository for the PHP exam. 
+
+**This project is dockerized**, to use it:
 1) Clone it (anywhere, **there is no need to place it in the xampp folder** because the PHP web server and the MySQL database are going to be inside a container),
 3) Run the Docker engine (*i.e.* open Docker desktop),
 4) Specify your path to the serverPHP folder in the bind-mount attached to the php-apache-environment container (*i.e.* in docker-compose.yml, row 24),
