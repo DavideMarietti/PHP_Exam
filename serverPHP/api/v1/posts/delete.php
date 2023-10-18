@@ -20,7 +20,8 @@ if ($post->delete()) {
     http_response_code(200);
     echo json_encode(array("message" => "Post was deleted"));
 }
-else {
+else
+{
     http_response_code(503);
     echo json_encode(array("message" => "Unable to delete the post"));
 }
