@@ -17,7 +17,8 @@ services:
       - "3306:3306"
 
   php-apache-environment:
-    image: php-apache:latest
+    #image: php-apache:latest
+    build: .
     container_name: php-apache
     depends_on:
       - db
