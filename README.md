@@ -2,10 +2,9 @@
 Repository for the PHP exam. 
 
 **This project is dockerized**, to use it:
-1) Clone it (anywhere, **there is no need to place it in the xampp folder** because the PHP web server and the MySQL database are going to be inside a container),
-3) Run the Docker engine (*i.e.* open Docker desktop),
-4) Specify your path to the serverPHP folder in the bind-mount attached to the php-apache-environment container (*i.e.* in docker-compose.yml, row 24),
-5) Open a Git bash inside the serverPHP folder and run ./launchApp. This will built a docker image based on php:8.0-apache and run the cluster of containers made by a php REST API server, a MySQL database and a phpMyAdmin service.
+1) Clone it (anywhere, **there is no need to place it in the xampp folder** because the PHP web server, the phpMyAdmin service and the MySQL database are going to be inside separated containers),
+2) Run the Docker engine (*i.e.* open Docker desktop),
+3) Open a Git bash inside the serverPHP folder and run ./launchApp. This will built a docker image based on php:8.0-apache and run the containers cluster.
 
 NOTE:
 * XAMPP is not required to run this project.
