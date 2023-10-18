@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     volumes:
-      - C:\Users\david\Desktop\Master_Full_Stack\PHP\exam\serverPHP:/var/www/html/
+      - .:/var/www/html/
     ports:
       - "3000:80"
 
