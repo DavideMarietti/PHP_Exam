@@ -122,8 +122,6 @@ class Post
             $this->creato = $creato;
         }
 
-    //MI SONO FERMATO QUI
-
     function read()
     {
         $query = "SELECT * FROM posts";
