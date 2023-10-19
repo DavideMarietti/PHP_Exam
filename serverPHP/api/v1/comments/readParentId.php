@@ -1,6 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../../../dataManager/Database.php';
 include_once '../../../dataManager/Comment.php';
@@ -10,7 +11,11 @@ $db = $database->getConnection();
 
 $comment = new Comment($db);
 
-$stmt = $comment->read();
+
+$parentid_toRead = isset($_GET['parentid']) ? $_GET['parentid'] : die();
+$comment->setParentId($parentid_toRead);
+
+$stmt = $comment->readByParentId();
 
 if ($stmt) {
     $comments_list = array();
@@ -32,9 +37,9 @@ if ($stmt) {
 
     http_response_code(200);
     echo json_encode($comments_list);
-} else {
+}
+else {
     http_response_code(404);
-    echo json_encode(array("message" => "Comment found"));
+    echo json_encode(array("message" => "Comment does not exist"));
 }
 ?>
-

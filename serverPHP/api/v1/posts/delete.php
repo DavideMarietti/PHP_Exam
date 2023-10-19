@@ -11,7 +11,7 @@ include_once '../../../dataManager/Post.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$user = new Post($db);
+$post = new Post($db);
 
 $id_toDel = isset($_GET['id']) ? $_GET['id'] : die();
 $post->setId($id_toDel);

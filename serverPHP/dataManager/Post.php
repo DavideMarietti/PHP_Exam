@@ -147,7 +147,7 @@ class Post
     function create()
     {
         $query = "INSERT INTO posts SET
-				  titolo=:titolo, testo=:testo, autore=:autore;
+				  titolo=:titolo, testo=:testo, autore=:autore";
 
         $stmt = $this->conn->prepare($query);
 
@@ -182,25 +182,20 @@ class Post
 
     function delete()
     {
+        //aggiungere eliminazione commenti sotto il post
         $query = "DELETE FROM posts WHERE id = ?";
-
         $stmt = $this->conn->prepare($query);
-
         $stmt->bindParam(1, $this->id);
-
         $stmt->execute();
-
         return $stmt;
     }
 
     function deleteAll()
     {
+        //aggiungere eliminazione commenti sotto il post
         $query = "DELETE FROM posts";
-
         $stmt = $this->conn->prepare($query);
-
         $stmt->execute();
-
         return $stmt;
     }
 }
