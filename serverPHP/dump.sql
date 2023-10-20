@@ -1,8 +1,8 @@
 SET
-SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+    SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET
-time_zone = "+00:00";
+    time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
@@ -13,10 +13,9 @@ time_zone = "+00:00";
 
 /*________ Users Table ________*/
 
-
 CREATE TABLE `users`
 (
-    `id`         int(11) NOT NULL,
+    `id`         int(11)                                NOT NULL,
     `username`   varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
     `password`   varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
     `nome`       varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -42,7 +41,7 @@ ALTER TABLE `users`
     ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `users`
-    MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
     AUTO_INCREMENT = 1;
 
 
@@ -52,7 +51,7 @@ CREATE TABLE `posts`
 (
     `id`      int(11)                                NOT NULL,
     `titolo`  varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `testo`   text        COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `testo`   text COLLATE utf8mb4_unicode_ci        DEFAULT NULL,
     `autore`  varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
     `like`    varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
     `dislike` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -90,6 +89,173 @@ ALTER TABLE `posts`
     ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `posts`
-    MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
     AUTO_INCREMENT = 1;
 
+
+/*________ Comments Table ________*/
+
+CREATE TABLE `comments`
+(
+    `id`       int(11)                                NOT NULL,
+    `testo`    text COLLATE utf8mb4_unicode_ci        DEFAULT NULL,
+    `autore`   varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `like`     varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `dislike`  varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `parentid` int(11)                                NOT NULL,
+    `level`    int(11)                                NOT NULL,
+    `creato`   date                                   NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+
+INSERT INTO `comments` (`id`, `testo`, `autore`, `like`, `dislike`, `parentid`, `level`, `creato`)
+VALUES (1,
+        'Il contributo del datore è tutto fuorchè marginale. Parliamo di una media di 1,5% della retribuzione lorda, ovvero un +20% del tfr maturato annui (che ricordiamo essere il 6.9% della retribuziine lorda).\n\nEdit: aggiungo che se vuoi cambiare spesso mettere il tfr bel fondo negoziale del ccnl con contributo datoriale e poi chiederne il riscatto alle dimissioni per perdità requisiti per me è la cosa migliore',
+        'Lollo',
+        '[1, 2]',
+        '[0]',
+        1,
+        0,
+        '2020-09-23'),
+       (2,
+        'Non sono d’accordo con la postilla finale. potresti facilmente trovarti nella situazione in cui il controvalore è minore della cifra depositata, come sta succedendo a me in questo momento. Se si cambia spesso e si vuole liquidare ogni volta fare il fondo negoziale non ha senso e ti espone ai rischi della volatilità.',
+        'Andre',
+        '[1,2]',
+        '[0]',
+        1,
+        1,
+        '2021-03-25'),
+       (3,
+        'È vero sicuramente ha il suo impatto.\n\nE dovrei anche considerare che in caso di riscatto avrei una tassazione importante lasciandolo in azienda.\n\nMa data la necessità di avere una certa liquidità aggiuntiva a breve ha senso impegnarsi ora in un fondo?',
+        'Ale',
+        '[1,2]',
+        '[0]',
+        1,
+        1,
+        '2022-07-06'),
+       (4,
+        'Puoi cominciare a guardare questa guida, dove spiegano come funzionano entrambi i metodi, e poi valutare:\n\n https://www.covip.it/per-il-cittadino/educazione-previdenziale/guida-introduttiva-alla-previdenza-complementare',
+        'Ali',
+        '[1,2]',
+        '[0]',
+        1,
+        1,
+        '2020-09-15'
+       ),
+       (5,
+        'Puoi cominciare a guardare questa guida, dove spiegano come funzionano entrambi i metodi, e poi valutare:\n\n https://www.covip.it/per-il-cittadino/educazione-previdenziale/guida-introduttiva-alla-previdenza-complementare',
+       'Lauretta',
+        '[1,2]',
+        '[3]',
+        1,
+        0,
+        '2020-09-23'
+        ),
+       (6,
+        'Grazie mille per la prospettiva.\n\n Non ho un Tfr pregresso da versare in quanto liquidato con lo ultimo cambio di lavoro.\n\nHo un po di soldi da parte di cui non ho necessità di utilizzo a stretto giro se non eventualmente per la casa. I quali pensavo di inserirli su un conto deposito 12 mesi.',
+        'Ali',
+        '[1,2,3,5]',
+        '[0]',
+        1,
+        0,
+        '2020-09-23'
+        ),
+       (7,
+        'Grazie, verifo la cosa.',
+        'Ale',
+        '[4,5]',
+        '[1]',
+        1,
+        1,
+        '2022-07-06'),
+       (
+        8,
+        'Siamo nella stessa situazione, con la differenza che non ho cambiato azienda. Per il momento io l’ho lasciato in azienda il tfr, in futuro però penso di trasferirlo su un pac in modo che poi non resta bloccato per 8 anni',
+       'Lollo',
+        '[1,2,3,4,5]',
+        '[0]',
+        2,
+        2,
+        '2022-07-06'),
+       (9,
+        'Siamo nella stessa situazione, con la differenza che non ho cambiato azienda. Per il momento io l’ho lasciato in azienda il tfr, in futuro però penso di trasferirlo su un pac in modo che poi non resta bloccato per 8 anni',
+        'Andre',
+        '[5]',
+        '[1,2,3,4]',
+        2,
+        2,
+        '2022-07-06'
+       ),
+       (10,
+        'Esattamente la % per arrivare al massimo deducibile annuale',
+        'Ale',
+        '[5]',
+        '[1,2,3,4]',
+        2,
+        0,
+        '2022-07-06'
+       ),
+       (11,
+        'Scusa la domanda un pò ignorante.. Conviene il massimo deducibile per ottimizzare la tassazione? Ma sempre? In qualsiasi scaglione?',
+        'Lollo',
+        '[5,2]',
+        '[1,4]',
+        10,
+        1,
+        '2020-09-23'
+       ),
+       (12,
+        'Curiosità (banale, credo):\n\n Ad ogni aumento fai la procedura per rivedere la % di contributo volontario?',
+        'Ale',
+        '[5]',
+        '[1,2,3,4]',
+        10,
+        1,
+        '2020-09-15'
+        ),
+       (13,
+        'Siamo nella stessa situazione, con la differenza che non ho cambiato azienda. Per il momento io l’ho lasciato in azienda il tfr, in futuro però penso di trasferirlo su un pac in modo che poi non resta bloccato per 8 anni',
+        'Lauretta',
+        '[1,2,3,4]',
+        '[5]',
+        12,
+        2,
+        '2022-07-06'
+       ),
+       (14,
+        'Io metto il minimo per queste ragioni:\n\n La mia generazione (anni 90), se mai ci arriverà, maturerà il diritto alla pensione in area 74 anni. Pertanto non avrò tutto questo tempo per godermi il mio fondo pensione.\n\n Vivendo a Milano, per me è quasi impossibile pensare di rinunciare ad una parte dello stipendio, dato che ormai i costi sono arrivati a livelli folli su tutti i fronti (ed in prospettiva la situazione non migliorerà).\n\n Con i livelli di inquinamento dell''aria, unitamente ad un SSN che si approccia al collasso, non mi stupirei se le mie condizioni di salute peggiorassero con il passare degli anni.',
+        'Lauretta',
+        '[3]',
+        '[1,2]',
+        12,
+        2,
+        '2022-07-06'
+        ),
+       (15,
+        'Per il punto 1 puoi leggere del RITA.',
+        'Ale',
+        '[5]',
+        '[1,2,3,4]',
+        14,
+        3,
+        '2020-09-15'
+       ),
+       (16,
+        'Io cerco di maxare i 5k annuali di deducibilità, ma conviene solo se hai il giusto mix di scaglione IRPEF alto e allocazione del fondo pensione decentemente rischiosa, altrimenti tra risparmio gestito e mille limiti rischia di essere una trappola.\n\n Puoi fare un check veloce se hai già in mente dei numeri sul mio comparatore qua: https://sossoldi.org/pac-o-fondo-pensione.html',
+        'Lollo',
+        '[5]',
+        '[1,2,3,4]',
+        14,
+        3,
+        '2020-09-23'
+        );
+
+
+ALTER TABLE `comments`
+    ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `comments`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 1;
