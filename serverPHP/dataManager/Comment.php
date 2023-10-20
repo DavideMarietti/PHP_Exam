@@ -1,17 +1,18 @@
 <?php
 
-class Post
+class Comment
 {
 
     private $conn;
 
-    public $id;
-    public $titolo;
-    public $testo;
-    public $autore;
-    private $like = [];
-    private $dislike = [];
-    public $creato;
+	  public $id;
+      public $testo;
+      public $autore;
+      public $parentid;
+      public $level;
+      public $like = [];
+      public $dislike = [];
+      public $creato;
 
     public function __construct($db)
     {
@@ -30,15 +31,28 @@ class Post
         $this->id = $id;
     }
 
-    public function getTitolo()
+
+    public function getParentId()
     {
-        return $this->titolo;
+        return $this->parentid;
     }
 
-    public function setTitolo($titolo)
+    public function setParentId($id)
     {
-        $this->titolo = $titolo;
+        $this->parentid = $id;
     }
+
+
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    public function setLevel($id)
+    {
+        $this->level = $id;
+    }
+
 
     public function getTesto()
     {
@@ -122,9 +136,10 @@ class Post
             $this->creato = $creato;
         }
 
+
     function read()
     {
-        $query = "SELECT * FROM posts";
+        $query = "SELECT * FROM comments";
         // query preparation
         $stmt = $this->conn->prepare($query);
         // query execution
@@ -135,7 +150,7 @@ class Post
 
     function readByAutore()
     {
-        $query = "SELECT * FROM posts WHERE posts.autore = ?";
+        $query = "SELECT * FROM comments WHERE comments.autore = ?";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->autore);
@@ -144,14 +159,27 @@ class Post
         return $stmt;
     }
 
+    function readByParentId()
+    {
+        $query = "SELECT * FROM comments WHERE comments.parentid = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->parentid);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     function create()
     {
-        $query = "INSERT INTO posts SET
-				  titolo=:titolo, testo=:testo, autore=:autore";
+		/*
+		se non si compilasse automaticamente l'id aggiungere qualcosa come:
+		id = (SELECT MAX(id) + 1 FROM comments), */
+        $query = "INSERT INTO comments SET
+				  testo=:testo, autore=:autore";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":titolo", $this->titolo);
         $stmt->bindParam(":testo", $this->testo);
         $stmt->bindParam(":autore", $this->autore);
 
@@ -162,8 +190,7 @@ class Post
 
     function update()
     {
-        $query = "UPDATE posts SET
-					titolo = :tt,
+        $query = "UPDATE comments SET
 					testo = :tx,
 					autore = :a
 					WHERE
@@ -171,7 +198,6 @@ class Post
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(':tt', $this->titolo);
         $stmt->bindParam(':tx', $this->testo);
         $stmt->bindParam(':a', $this->autore);
         $stmt->bindParam(':i', $this->id);
@@ -182,20 +208,25 @@ class Post
 
     function delete()
     {
-        //aggiungere eliminazione commenti sotto il post
-        $query = "DELETE FROM posts WHERE id = ?";
+        $query = "DELETE FROM comments WHERE id = ?";
+
         $stmt = $this->conn->prepare($query);
+
         $stmt->bindParam(1, $this->id);
+
         $stmt->execute();
+
         return $stmt;
     }
 
     function deleteAll()
     {
-        //aggiungere eliminazione commenti sotto il post
-        $query = "DELETE FROM posts";
+        $query = "DELETE FROM comments";
+
         $stmt = $this->conn->prepare($query);
+
         $stmt->execute();
+
         return $stmt;
     }
 }

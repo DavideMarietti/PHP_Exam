@@ -1,6 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../../../dataManager/Database.php';
 include_once '../../../dataManager/Post.php';
@@ -10,7 +11,11 @@ $db = $database->getConnection();
 
 $post = new Post($db);
 
-$stmt = $post->read();
+
+$autore_toRead = isset($_GET['autore']) ? $_GET['autore'] : die();
+$post->setAutore($eta_toRead);
+
+$stmt = $post->readByAutore();
 
 if ($stmt) {
     $posts_list = array();
@@ -31,8 +36,9 @@ if ($stmt) {
 
     http_response_code(200);
     echo json_encode($posts_list);
-} else {
+}
+else {
     http_response_code(404);
-    echo json_encode(array("message" => "Post found"));
+    echo json_encode(array("message" => "Post does not exist"));
 }
 ?>
