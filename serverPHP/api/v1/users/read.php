@@ -34,6 +34,6 @@ if ($stmt) {
     echo json_encode($users_list);
 } else {
     http_response_code(404);
-    echo json_encode(array("message" => "Users found"));
+    echo json_encode(array("message" => "Users not found"));
 }
 ?>

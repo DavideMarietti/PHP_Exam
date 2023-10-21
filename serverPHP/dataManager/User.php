@@ -224,5 +224,4 @@ class User
         return $stmt;
     }
 }
-
 ?>

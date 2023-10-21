@@ -12,10 +12,10 @@ $db = $database->getConnection();
 $post = new Post($db);
 
 
-$autore_toRead = isset($_GET['autore']) ? $_GET['autore'] : die();
-$post->setAutore($autore_toRead);
+$id_toRead = isset($_GET['id']) ? $_GET['id'] : die();
+$post->setAutore($id_toRead);
 
-$stmt = $post->readByAutore();
+$stmt = $post->readById();
 
 if ($stmt) {
     $posts_list = array();

@@ -9,15 +9,16 @@ class Post
     public $titolo;
     public $testo;
     public $autore;
-    private $like = [];
-    private $dislike = [];
+    private $like;
+    private $dislike;
     public $creato;
 
     public function __construct($db)
     {
         $this->conn = $db;
-        //$this->image = "/assets/images/user.png";
-        //$this->iscrizione = date("Y-m-d H:i:s");
+        $this->like = "[]";
+        $this->dislike = "[]";
+        $this->creato = date("Y-m-d H:i:s");
     }
 
     public function getId()
@@ -25,9 +26,9 @@ class Post
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($id_par)
     {
-        $this->id = $id;
+        $this->id = $id_par;
     }
 
     public function getTitolo()
@@ -60,41 +61,52 @@ class Post
         $this->autore = $autore;
     }
 
-    public function getLike() {
+    public function getLike()
+    {
         return $this->like;
     }
 
-    public function setLike($like) {
+    public function setLike($like)
+    {
         $this->like = $like;
     }
 
-    public function giveLike($userid) {
-        if (in_array($userid, $this->dislike)) {
-            $dislikeIndex = array_search($userid, $this->dislike);
-            unset($this->dislike[$dislikeIndex]);
+    public function giveLike($userid)
+    {
+        $d = (array)$this->dislike;
+        $l = (array)$this->like;
+        if (in_array($userid, $d)) {
+            $dislikeIndex = array_search($userid, $d);
+            unset($d[$dislikeIndex]);
             // Re-index the array after removing the element
-            $this->dislike = array_values($this->dislike);
+            $this->dislike = json_encode($d);
+        } else {
+            $this->dislike = json_encode($d);
         }
 
-        if (in_array($userid, $this->like)) {
-            $likeIndex = array_search($userid, $this->like);
-            unset($this->like[$likeIndex]);
+        if (in_array($userid, $l)) {
+            $likeIndex = array_search($userid, $l);
+            unset($l[$likeIndex]);
             // Re-index the array after removing the element
-            $this->like = array_values($this->like);
+            $this->like = json_encode($l);
         } else {
-            $this->like[] = $userid;
+            $l[] = $userid;
+            $this->like = json_encode($l);
         }
     }
 
-    public function getDislike() {
+    public function getDislike()
+    {
         return $this->dislike;
     }
 
-    public function setDislike($dislike) {
+    public function setDislike($dislike)
+    {
         $this->dislike = $dislike;
     }
 
-    public function giveDislike($userid) {
+    public function giveDislike($userid)
+    {
         if (in_array($userid, $this->like)) {
             $likeIndex = array_search($userid, $this->like);
             unset($this->like[$likeIndex]);
@@ -113,14 +125,14 @@ class Post
     }
 
     public function getCreato()
-        {
-            return $this->creato;
-        }
+    {
+        return $this->creato;
+    }
 
-        public function setCreato($creato)
-        {
-            $this->creato = $creato;
-        }
+    public function setCreato($creato)
+    {
+        $this->creato = $creato;
+    }
 
     function read()
     {
@@ -144,36 +156,49 @@ class Post
         return $stmt;
     }
 
+    function readById()
+    {
+        $query = "SELECT * FROM posts WHERE posts.id = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+
+        return $stmt;
+    }
+
     function create()
     {
         $query = "INSERT INTO posts SET
-				  titolo=:titolo, testo=:testo, autore=:autore";
+				  titolo=:titolo, testo=:testo, autore=:autore, posts.like= :like, posts.dislike=:dislike, creato=:creato";
 
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(":titolo", $this->titolo);
         $stmt->bindParam(":testo", $this->testo);
         $stmt->bindParam(":autore", $this->autore);
+        $stmt->bindParam(":like", $this->like);
+        $stmt->bindParam(":dislike", $this->dislike);
+        $stmt->bindParam(":creato", $this->creato);
 
         $stmt->execute();
 
         return $stmt;
     }
 
-    function update()
+
+    function updateLikeDislike()
     {
         $query = "UPDATE posts SET
-					titolo = :tt,
-					testo = :tx,
-					autore = :a
+					posts.like = :l,
+					posts.dislike = :d
 					WHERE
 					id = :i";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(':tt', $this->titolo);
-        $stmt->bindParam(':tx', $this->testo);
-        $stmt->bindParam(':a', $this->autore);
+        $stmt->bindParam(':l', $this->like);
+        $stmt->bindParam(':d', $this->dislike);
         $stmt->bindParam(':i', $this->id);
         $stmt->execute();
 
@@ -182,7 +207,6 @@ class Post
 
     function delete()
     {
-        //aggiungere eliminazione commenti sotto il post
         $query = "DELETE FROM posts WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);

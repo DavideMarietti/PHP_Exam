@@ -11,7 +11,7 @@ include_once '../../../dataManager/Post.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$user = new Post($db);
+$post = new Post($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -20,14 +20,14 @@ if (
     !empty($data->testo) &&
     !empty($data->autore)
 ) {
-    $user->setTitolo($data->titolo);
-    $user->setTesto($data->testo);
-    $user->setAutore($data->autore);
+    $post->setTitolo($data->titolo);
+    $post->setTesto($data->testo);
+    $post->setAutore($data->autore);
 
     $stmt = $post->create();
     if ($stmt) {
         http_response_code(201);
-        echo json_encode($user);
+        echo json_encode($post);
     } else {
         http_response_code(503);
         echo json_encode(array("message" => "Unable to create the post"));
