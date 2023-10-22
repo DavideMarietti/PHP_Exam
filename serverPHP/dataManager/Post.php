@@ -75,6 +75,7 @@ class Post
     {
         $d = (array)$this->dislike;
         $l = (array)$this->like;
+
         if (in_array($userid, $d)) {
             $dislikeIndex = array_search($userid, $d);
             unset($d[$dislikeIndex]);
@@ -107,20 +108,26 @@ class Post
 
     public function giveDislike($userid)
     {
-        if (in_array($userid, $this->like)) {
-            $likeIndex = array_search($userid, $this->like);
-            unset($this->like[$likeIndex]);
+        $d = (array)$this->dislike;
+        $l = (array)$this->like;
+
+        if (in_array($userid, $l)) {
+            $dislikeIndex = array_search($userid, $l);
+            unset($l[$dislikeIndex]);
             // Re-index the array after removing the element
-            $this->like = array_values($this->like);
+            $this->dislike = json_encode($l);
+        } else {
+            $this->dislike = json_encode($l);
         }
 
-        if (in_array($userid, $this->dislike)) {
-            $dislikeIndex = array_search($userid, $this->dislike);
-            unset($this->dislike[$dislikeIndex]);
+        if (in_array($userid, $d)) {
+            $likeIndex = array_search($userid, $d);
+            unset($d[$likeIndex]);
             // Re-index the array after removing the element
-            $this->dislike = array_values($this->dislike);
+            $this->like = json_encode($d);
         } else {
-            $this->dislike[] = $userid;
+            $d[] = $userid;
+            $this->like = json_encode($d);
         }
     }
 

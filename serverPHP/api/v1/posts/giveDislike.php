@@ -48,7 +48,7 @@ $post->setLike($posts_list[0]['like']);
 $post->setDislike($posts_list[0]['dislike']);
 $post->setCreato($posts_list[0]['creato']);
 
-$post->giveLike($data);
+$post->giveDislike($data);
 
 $stmt = $post->updateLikeDislike();
 
@@ -58,6 +58,6 @@ if($stmt) {
 }
 else {
     http_response_code(503);
-    echo json_encode(array("message" => "Unable give like"));
+    echo json_encode(array("message" => "Unable give dislike"));
 }
 ?>
