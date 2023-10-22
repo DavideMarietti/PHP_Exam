@@ -1,0 +1,16 @@
+.container {
+  background-color: rgba(39, 40, 51, 0.965);
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background-color: #0353A4;
+  width: 100%;
+}
+
+.statiche{
+  background-color: #0466C8 !important;
+  justify-content: space-evenly !important;
+}
+

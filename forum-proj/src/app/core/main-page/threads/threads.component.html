@@ -1,0 +1,166 @@
+<div *ngIf="control.autenticato && control.newthread"
+     class="newTD">
+  <div class="form-group part1">
+    <input type="text" class="form-control" id="titolo" placeholder="Inserisci titolo..." [(ngModel)]="titolo">
+  </div>
+  <div class="form-group part3" style="margin-top: 15px">
+    <textarea type="text" class="form-control" id="testo" placeholder="Inserisci testo..." style="height: 150px;"
+              [(ngModel)]="testo"></textarea>
+  </div>
+  <div class="form-group part2" style="margin-top: 15px">
+    <button (click)=addThread() class="btnSubmit">Post</button>
+  </div>
+</div>
+
+
+<div class="author-popup"
+     *ngIf="popbox"
+     [ngStyle]="{'position': 'absolute', 'left': (x+5) +'px', 'top': (y-90) + 'px'}">
+  <div>
+    <img src="{{popuser.image}}" width="80" height="80" style="padding: 8px 8px 0 8px;">
+  </div>
+  <div class="author-info" style="padding: 8px 8px 0 8px; color: #ffffff">
+    <p style="font-weight: 600">{{popuser.nome}} {{popuser.cognome}}</p>
+    <p>Age: {{popuser.eta}} years</p>
+  </div>
+</div>
+
+<div *ngFor="let thread of threads; let i = index" [attr.data-index]="i">
+  <div class="thread-box" *ngIf="thread.view">
+
+    <button class="btn-close"
+            style="float: right; margin-bottom: 10px;"
+            *ngIf="control.autenticato && thread.autore === user.username"
+            (click)=delete(i,true);
+    ></button>
+
+    <div class="thread-sub2">
+
+      <div style="display: inline-block; width: 100%;">
+        <p class="author" style="float: left"><i>Author: <b (mouseover)="setPopupUser(thread.autore,$event)"
+                                                           (mouseleave)="setPopupUser(thread.autore,$event)"
+                                                           [ngStyle]="{'cursor': 'pointer'}">{{thread.autore}} </b></i>
+        </p>
+        <p class="creato" style="float: right">
+          {{thread.creato.split('T')[0]}}
+          - {{thread.creato.split('T')[1].split('.')[0]}}
+        </p>
+      </div>
+      <h1 (click)=expand_thread(i)
+      >{{thread.titolo}}</h1>
+      <p class="thread-text"
+         *ngIf="thread.expand"
+      >{{thread.testo}}</p>
+
+      <div class="thread-bar">
+
+        <div [ngClass]=" thread.like.includes(user.id) && control.autenticato ? 'arrow-up-selected' : 'arrow-up'"
+             (click)=reactionControl(i,true,true)
+        ></div>
+        <p class="reaction-p">{{thread.like.length - thread.dislike.length}}</p>
+        <div
+          [ngClass]=" thread.dislike.includes(user.id)  && control.autenticato ? 'arrow-down-selected' : 'arrow-down'"
+          (click)=reactionControl(i,true,false)
+        ></div>
+
+        <div class="comment"
+             (click)=expand_comments(i,true)
+             *ngIf="thread.expand"
+        ><img src="./assets/images/chat.png"
+              class="icon"
+        >
+          <p class="message-p">{{thread.commcounter}}</p>
+        </div>
+
+        <div class="answer"
+             *ngIf="thread.expand && control.autenticato"
+             (click)="answer_form(i, true)"
+        ><img src="./assets/images/answer.png"
+              class="icon">
+        </div>
+
+        <img src="./assets/images/send.png"
+             class="icon"
+             *ngIf="thread.answer"
+             (click)="addComment(i, true)">
+      </div>
+
+      <textarea type="text"
+                class="form-control"
+                id="testo_"
+                placeholder="Inserisci testo..."
+                *ngIf="thread.answer"
+                [(ngModel)]="testo_"
+                style="width: calc(100% - 10px); margin: 15px 5px 0 5px"
+      ></textarea>
+
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let comment of comments; let i = index" [attr.data-index]="i">
+  <div class="comment-box"
+       [ngStyle]="{'margin-left': (comment.level+1)*30+'px'}"
+       *ngIf="comment.view">
+
+    <button class="btn-close"
+            style="float: right; margin-bottom: 10px;"
+            *ngIf="control.autenticato && comment.autore === user.username"
+            (click)=delete(i,false);
+    ></button>
+
+    <div class="thread-sub2">
+      <div style="display: inline-block; width: 100%;">
+        <p class="author" style="float: left"><i>Author: <b (mouseover)="setPopupUser(comment.autore,$event)"
+                                       (mouseleave)="setPopupUser(comment.autore,$event)"
+                                       [ngStyle]="{'cursor': 'pointer'}">{{comment.autore}}</b> <!--level
+          <b>{{comment.level}}</b--></i></p>
+        <p class="creato" style="float: right">{{comment.creato.split('T')[0]}} - {{comment.creato.split('T')[1].split('.')[0]}}</p>
+      </div>
+      <p class="thread-text">{{comment.testo}}</p>
+    </div>
+
+    <div class="thread-bar">
+      <div
+        [ngClass]=" comment.like.includes(user.id) && control.autenticato ? 'arrow-up-selected' : 'arrow-up'"
+        (click)=reactionControl(i,false,true)>
+      </div>
+      <p class="reaction-p">{{comment.like.length - comment.dislike.length}}</p>
+      <div [ngClass]=" comment.dislike.includes(user.id) && control.autenticato ? 'arrow-down-selected' : 'arrow-down'"
+           (click)=reactionControl(i,false,false)>
+
+      </div>
+      <div class="comment"
+           (click)=expand_comments(i,false)
+      ><img src="./assets/images/chat.png" class="icon">
+        <p class="message-p">{{comment.commcounter}}</p>
+      </div>
+
+      <div class="answer"
+      ><img src="./assets/images/answer.png"
+            class="icon"
+            *ngIf="control.autenticato"
+            (click)="answer_form(i, false)"
+      ></div>
+
+      <img src="./assets/images/send.png"
+           class="icon"
+           *ngIf="comment.answer"
+           (click)="addComment(i, false)">
+
+    </div>
+
+    <textarea type="text"
+              class="form-control"
+              id="testo__"
+              placeholder="Inserisci testo..."
+              *ngIf="comment.answer"
+              [(ngModel)]="testo__"
+              style="width: calc(100% - 10px); margin: 15px 5px 0 5px"
+    ></textarea>
+
+  </div>
+</div>
+
+
+

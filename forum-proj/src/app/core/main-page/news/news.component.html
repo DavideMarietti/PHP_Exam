@@ -1,0 +1,17 @@
+<div class="selectors" style="padding: 10px 0; font-size: 20px;">
+  <p style="color: #979DAC; font-weight: 900; padding: 10px;">Latest papers: </p>
+  <p *ngFor="let sym of symbol; let i = index"
+     [attr.data-index]="i" (click)="searchNews(i)"
+     [ngClass]=" selected === sym ? 'index-selected' : 'index-selectable'">
+    {{sym}}
+  </p>
+</div>
+<div class="news-section">
+  <div class="news-box"
+       *ngFor="let news of stockNews">
+    <h1 style="font-size: 16px; font-weight: 700">{{news.title}}</h1>
+    <p>Author {{news.authors}}</p>
+    <a href="{{news.url}}" target="_blank">Link to the original article</a>
+    <p>{{news.summary}}</p>
+  </div>
+</div>

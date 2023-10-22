@@ -1,0 +1,39 @@
+
+        <div class="nav-1">
+        <!--a class="navbar-brand"
+           (click)=setPage(1)
+        --><img src="./assets/images/site_icon.svg" width="50" height="50" class="d-inline-block align-middle" alt="">
+          PupoPersonalEconomy
+        <!--/a-->
+        </div>
+
+          <div class="nav-2">
+            <button type="button" class="btn btn-default dropdown-toggle thumbnail " data-bs-toggle="dropdown" aria-expanded="false">
+              <img class="img-circle" src="{{user.image}}" width="38" height="38">
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item"
+                     href="#"
+                     *ngIf="!control.autenticato"
+                     (click) = loginopen()
+              >Accedi</a></li>
+              <li><a class="dropdown-item"
+                     href="#"
+                     *ngIf="!control.autenticato"
+                     (click) = registopen()
+              >Registrati</a></li>
+              <li><a class="dropdown-item"
+                     href="#"
+                     *ngIf="control.autenticato"
+                     (click)=setPage(3);
+              >Profile</a></li>
+              <div class="dropdown-divider"
+                   *ngIf="control.autenticato"
+              ></div>
+              <li><a class="dropdown-item"
+                     href="#"
+                     *ngIf="control.autenticato"
+                     (click) = logout()
+              >Logout</a></li>
+            </ul>
+          </div>

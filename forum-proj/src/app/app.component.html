@@ -1,0 +1,32 @@
+<app-header [control]="control"
+            (control_)='ControllerIN($event)'
+            [user]="user"
+            (user_)='UserController($event)'
+></app-header>
+<app-jumbotron (control_)='ControllerIN($event)'
+               [user]="user"
+               (user_)='UserController($event)'
+               [titolo]="titolo"
+               [sottotitolo]="sottotitolo"
+></app-jumbotron>
+<app-login [control]="control"
+           (control_)='ControllerIN($event)'
+           (user_)='UserController($event)'
+           *ngIf="control.loginform"
+></app-login>
+<app-sign-in [control]="control"
+             (control_)='ControllerIN($event)'
+             *ngIf="control.registform"
+></app-sign-in>
+<!--router-outlet></--router-outlet-->
+<app-left-nav ></app-left-nav>
+<app-main-page [control]="control"
+               (control_)='ControllerIN($event)'
+               [user]="user"
+               (user_)='UserController($event)'
+               [searchword]="searchword"
+></app-main-page>
+<app-right-nav [control]="control"
+               (control_)='ControllerIN($event)'
+               (searchword_)="searchFunction($event)"
+></app-right-nav>

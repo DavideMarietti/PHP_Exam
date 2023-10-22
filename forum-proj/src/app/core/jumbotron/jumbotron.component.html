@@ -1,0 +1,36 @@
+<div class="board">
+  <div class="board-welcome" style="z-index: 10000">
+    <h2 style="color: #0466C8">{{titolo}}</h2>
+    <p style="color: #0466C8">{{sottotitolo}}</p>
+  </div>
+  <div class="board-welcome">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link"
+               href="#"
+               (click)=setPage(1)
+            >Posts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+               href="#"
+               (click)=setPage(2)
+            >Graphs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+               href="#"
+               (click)=setPage(4)
+            >News</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+

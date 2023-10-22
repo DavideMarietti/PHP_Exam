@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: MY_DATABASE
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+    volumes:
+      - ./serverPHP/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - "3306:3306"
+
+  php-apache-environment:
+    #image: php-apache:latest
+    build: ./serverPHP
+    container_name: php-apache
+    depends_on:
+      - db
+    volumes:
+      - ./serverPHP:/var/www/html/
+    ports:
+      - "3000:80"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '3001:80'
+    restart: always
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+  angular-frontend:
+    image: angular-frontend:latest
+    build: ./forum-proj
+    container_name: angular-frontend
+    ports:
+      - "3002:80"
+    depends_on:
+      - php-apache-environment
