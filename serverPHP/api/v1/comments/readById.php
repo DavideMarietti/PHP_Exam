@@ -12,23 +12,23 @@ $db = $database->getConnection();
 $comment = new Comment($db);
 
 
-$parentid_toRead = isset($_GET['parentid']) ? $_GET['parentid'] : die();
-$comment->setParentId($parentid_toRead);
+$id_toRead = isset($_GET['id']) ? $_GET['id'] : die();
+$comment->setId($id_toRead);
 
-$stmt = $comment->readByParentId();
+$stmt = $comment->readById();
 
 if ($stmt) {
     $comments_list = array();
 
     foreach ($stmt as $row) {
         $comment_obj = array(
-            "id" => $row['id'],
+            "id" => (int)$row['id'],
             "testo" => $row['testo'],
             "autore" => $row['autore'],
-            "parentid" => $row['parentid'],
-            "level" => $row['level'],
-            "like" => $row['like'],
-            "dislike" => $row['dislike'],
+            "parentid" => (int)$row['parentid'],
+            "level" => (int)$row['level'],
+            "like" => json_decode($row['like']),
+            "dislike" => json_decode($row['dislike']),
             "creato" => $row['creato']
         );
 

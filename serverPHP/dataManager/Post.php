@@ -80,19 +80,63 @@ class Post
             $dislikeIndex = array_search($userid, $d);
             unset($d[$dislikeIndex]);
             // Re-index the array after removing the element
-            $this->dislike = json_encode($d);
+            //$this->dislike = json_encode($d);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->dislike = $new_l;
         } else {
-            $this->dislike = json_encode($d);
+            //$this->dislike = json_encode($d);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->dislike = $new_l;
         }
 
         if (in_array($userid, $l)) {
             $likeIndex = array_search($userid, $l);
             unset($l[$likeIndex]);
             // Re-index the array after removing the element
-            $this->like = json_encode($l);
+            //$this->like = json_encode($l);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
         } else {
             $l[] = $userid;
-            $this->like = json_encode($l);
+            //$this->like = json_encode($l);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
         }
     }
 
@@ -114,20 +158,58 @@ class Post
         if (in_array($userid, $l)) {
             $dislikeIndex = array_search($userid, $l);
             unset($l[$dislikeIndex]);
-            // Re-index the array after removing the element
-            $this->dislike = json_encode($l);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
         } else {
-            $this->dislike = json_encode($l);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
         }
 
         if (in_array($userid, $d)) {
             $likeIndex = array_search($userid, $d);
             unset($d[$likeIndex]);
-            // Re-index the array after removing the element
-            $this->like = json_encode($d);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->dislike = $new_l;
         } else {
             $d[] = $userid;
-            $this->like = json_encode($d);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->dislike = $new_l;
         }
     }
 
@@ -192,7 +274,6 @@ class Post
 
         return $stmt;
     }
-
 
     function updateLikeDislike()
     {

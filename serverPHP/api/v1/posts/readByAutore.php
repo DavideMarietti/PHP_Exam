@@ -22,7 +22,7 @@ if ($stmt) {
 
     foreach ($stmt as $row) {
         $post_obj = array(
-            "id" => $row['id'],
+            "id" => (int)$row['id'],
             "titolo" => $row['titolo'],
             "testo" => $row['testo'],
             "autore" => $row['autore'],

@@ -1,6 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET");
 
 include_once '../../../dataManager/Database.php';
 include_once '../../../dataManager/Comment.php';
@@ -17,13 +18,13 @@ if ($stmt) {
 
     foreach ($stmt as $row) {
         $comment_obj = array(
-            "id" => $row['id'],
+            "id" => (int)$row['id'],
             "testo" => $row['testo'],
             "autore" => $row['autore'],
-            "parentid" => $row['parentid'],
-            "level" => $row['level'],
-            "like" => $row['like'],
-            "dislike" => $row['dislike'],
+            "parentid" => (int)$row['parentid'],
+            "level" => (int)$row['level'],
+            "like" => json_decode($row['like']),
+            "dislike" => json_decode($row['dislike']),
             "creato" => $row['creato']
         );
 
@@ -34,7 +35,7 @@ if ($stmt) {
     echo json_encode($comments_list);
 } else {
     http_response_code(404);
-    echo json_encode(array("message" => "Comment found"));
+    echo json_encode(array("message" => "Comment not found"));
 }
 ?>
 

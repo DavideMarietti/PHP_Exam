@@ -13,7 +13,7 @@ $comment = new Comment($db);
 
 
 $autore_toRead = isset($_GET['autore']) ? $_GET['autore'] : die();
-$comment->setAutore($eta_toRead);
+$comment->setAutore($autore_toRead);
 
 $stmt = $comment->readByAutore();
 
@@ -22,13 +22,13 @@ if ($stmt) {
 
     foreach ($stmt as $row) {
         $comment_obj = array(
-            "id" => $row['id'],
+            "id" => (int)$row['id'],
             "testo" => $row['testo'],
             "autore" => $row['autore'],
-            "parentid" => $row['parentid'],
-            "level" => $row['level'],
-            "like" => $row['like'],
-            "dislike" => $row['dislike'],
+            "parentid" => (int)$row['parentid'],
+            "level" => (int)$row['level'],
+            "like" => json_decode($row['like']),
+            "dislike" => json_decode($row['dislike']),
             "creato" => $row['creato']
         );
 
