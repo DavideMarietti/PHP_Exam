@@ -15,7 +15,7 @@ export class SignInService {
 
   fetchUsers() {
     return this.http
-      .get<Utente[]>('http://localhost:9191/api/v1/users')
+      .get<Utente[]>('http://localhost:3000/api/v1/users/read.php')
       .pipe(
         catchError(errorRes => {
           // Send to analytics server
@@ -28,7 +28,7 @@ export class SignInService {
     console.log("service body", user);
     return this.http
       .post<Utente>(
-        'http://localhost:9191/api/v1/users/create',
+        'http://localhost:3000/api/v1/users/create.php',
         user
       ).pipe(
         catchError(errorRes => {

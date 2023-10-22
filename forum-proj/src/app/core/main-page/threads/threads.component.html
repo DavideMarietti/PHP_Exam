@@ -42,8 +42,7 @@
                                                            [ngStyle]="{'cursor': 'pointer'}">{{thread.autore}} </b></i>
         </p>
         <p class="creato" style="float: right">
-          {{thread.creato.split('T')[0]}}
-          - {{thread.creato.split('T')[1].split('.')[0]}}
+          {{thread.creato}}
         </p>
       </div>
       <h1 (click)=expand_thread(i)
@@ -115,7 +114,7 @@
                                        (mouseleave)="setPopupUser(comment.autore,$event)"
                                        [ngStyle]="{'cursor': 'pointer'}">{{comment.autore}}</b> <!--level
           <b>{{comment.level}}</b--></i></p>
-        <p class="creato" style="float: right">{{comment.creato.split('T')[0]}} - {{comment.creato.split('T')[1].split('.')[0]}}</p>
+        <p class="creato" style="float: right">{{comment.creato}}</p>
       </div>
       <p class="thread-text">{{comment.testo}}</p>
     </div>

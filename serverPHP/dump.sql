@@ -30,12 +30,11 @@ CREATE TABLE `users`
 
 
 INSERT INTO `users` (`id`, `username`, `password`, `nome`, `cognome`, `sesso`, `eta`, `image`, `iscrizione`)
-VALUES (1, 'Dave', 'pollo123', 'Davide', 'Marietti', 'him/him', '29', '/assets/images/user.png', '2023-10-16'),
-       (2, 'Andre', 'test', 'Andrea', 'Balbo Mossetto', 'him/him', '28', '/assets/images/user2.png', '2020-09-23'),
-       (3, 'Lollo', 'test', 'Lorenzo', 'Gianotti', 'him/him', '27', '/assets/images/user3.png', '2021-03-25'),
-       (4, 'Ali', 'test', 'Alice', 'Pregnolato', 'her/her', '26', '/assets/images/user1.png', '2022-07-06'),
-       (5, 'Lauretta', 'test', 'Laura', 'Rossi', 'her/her', '35', '/assets/images/user4.png', '2020-09-15'),
-       (6, 'Ale', 'test', 'Alessia', 'Brambilla', 'her/her', '45', '/assets/images/user5.png', '2020-08-17');
+VALUES (1, 'Andre', 'test', 'Andrea', 'Balbo Mossetto', 'him/him', '28', '/assets/images/user2.png', '2020-09-23'),
+       (2, 'Lollo', 'test', 'Lorenzo', 'Gianotti', 'him/him', '27', '/assets/images/user3.png', '2021-03-25'),
+       (3, 'Ali', 'test', 'Alice', 'Pregnolato', 'her/her', '26', '/assets/images/user1.png', '2022-07-06'),
+       (4, 'Lauretta', 'test', 'Laura', 'Rossi', 'her/her', '35', '/assets/images/user4.png', '2020-09-15'),
+       (5, 'Ale', 'test', 'Alessia', 'Brambilla', 'her/her', '45', '/assets/images/user5.png', '2020-08-17');
 
 ALTER TABLE `users`
     ADD PRIMARY KEY (`id`);

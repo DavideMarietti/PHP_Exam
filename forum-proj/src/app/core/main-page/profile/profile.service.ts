@@ -14,7 +14,7 @@ export class ProfileService {
 
   fetchThreads() {
     return this.http
-      .get<Thread[]>('http://localhost:9191/api/v1/posts')
+      .get<Thread[]>('http://localhost:3000/api/v1/posts/read.php')
       .pipe(
         map(responseData => {
           return responseData;
@@ -28,7 +28,7 @@ export class ProfileService {
 
   fetchComments() {
     return this.http
-      .get<Comment[]>('http://localhost:9191/api/v1/comments')
+      .get<Comment[]>('http://localhost:3000/api/v1/comments/read.php')
       .pipe(
         map(responseData => {
           return responseData;

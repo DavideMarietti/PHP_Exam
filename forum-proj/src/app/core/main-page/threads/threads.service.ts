@@ -12,8 +12,9 @@ export class ThreadsService {
   constructor(private http: HttpClient) {}
 
   fetchThreads() {
-    return this.http002
-3      .pipe(
+    return this.http
+      .get<Thread[]>('http://localhost:3000/api/v1/posts/read.php')
+      .pipe(
         map(responseData => {
           return responseData;
         }),
@@ -26,7 +27,7 @@ export class ThreadsService {
 
   fetchComments() {
     return this.http
-      .get<Comment[]>('http://localhost:9191/api/v1/comments')
+      .get<Comment[]>('http://localhost:3000/api/v1/comments/read.php')
       .pipe(
         map(responseData => {
           return responseData;
@@ -42,7 +43,7 @@ export class ThreadsService {
     const postData = { titolo: titolo, testo: testo, autore: autore };
     return this.http
       .post<Thread>(
-        'http://localhost:9191/api/v1/posts/create',
+        'http://localhost:3000/api/v1/posts/create.php',
         postData
       )
       .pipe(
@@ -60,7 +61,7 @@ export class ThreadsService {
     const postData = {testo: testo, autore: autore, parentid: parentid, level: level };
     return this.http
       .post<Comment>(
-        'http://localhost:9191/api/v1/comments/create',
+        'http://localhost:3000/api/v1/comments/create.php',
         postData
       )
       .pipe(
@@ -75,7 +76,7 @@ export class ThreadsService {
   }
 
   deleteThread(id: number) {
-    const url: string = `http://localhost:9191/api/v1/posts/${id}`;
+    const url: string = `http://localhost:3000/api/v1/posts/delete.php?id=${id}`;
     console.log(url);
     return this.http
       .delete(
@@ -85,7 +86,7 @@ export class ThreadsService {
   }
 
   deleteComment(id: number) {
-    const url: string = `http://localhost:9191/api/v1/comments/${id}`;
+    const url: string = `http://localhost:3000/api/v1/comments/delete.php?id=${id}`;
     console.log(url);
     return this.http
       .delete(
@@ -96,7 +97,7 @@ export class ThreadsService {
 
   fetchUsers() {
     return this.http
-      .get<Utente[]>('http://localhost:9191/api/v1/users')
+      .get<Utente[]>('http://localhost:3000/api/v1/users/read.php')
       .pipe(
         catchError(errorRes => {
           // Send to analytics server
@@ -106,7 +107,7 @@ export class ThreadsService {
   }
 
   commentLike(id_com: number, id_user: number){
-    const url: string = `http://localhost:9191/api/v1/comments/like/${id_com}`;
+    const url: string = `http://localhost:3000/api/v1/comments/giveLike.php?id=${id_com}`;
     return this.http
       .put<Comment>(
         url,
@@ -115,7 +116,7 @@ export class ThreadsService {
   }
 
   commentDislike(id_com: number, id_user: number){
-    const url: string = `http://localhost:9191/api/v1/comments/dislike/${id_com}`;
+    const url: string = `http://localhost:3000/api/v1/comments/giveDislike.php?id=${id_com}`;
     return this.http
       .put<Comment>(
         url,
@@ -124,7 +125,7 @@ export class ThreadsService {
   }
 
   threadLike(id_thr: number, id_user: number){
-    const url: string = `http://localhost:9191/api/v1/posts/like/${id_thr}`;
+    const url: string = `http://localhost:3000/api/v1/posts/giveLike.php?id=${id_thr}`;
     return this.http
       .put<Thread>(
         url,
@@ -133,7 +134,7 @@ export class ThreadsService {
   }
 
   threadDislike(id_thr: number, id_user: number){
-    const url: string = `http://localhost:9191/api/v1/posts/dislike/${id_thr}`;
+    const url: string = `http://localhost:3000/api/v1/posts/giveDislike.php?id=${id_thr}`;
     return this.http
       .put<Thread>(
         url,
