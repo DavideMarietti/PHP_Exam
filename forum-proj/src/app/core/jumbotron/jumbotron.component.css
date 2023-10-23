@@ -7,13 +7,16 @@
 
 .board {
   position: relative;
+  width: 100%;
+  height: 100%;
+  margin-top: 5px;
 }
 
 .board::before {
   content: "";
-  background: #000 url(https://i0.wp.com/futurodigitale.infocert.it/wp-content/uploads/sites/7/2021/04/Finance-2021.jpg?fit=1500%2C570&ssl=1)
-  top center no-repeat;
-  background-size: cover;
+  /*background: url("../../../assets/images/cover1.png") top center no-repeat;*/
+  background: transparent;
+  background-size: contain;
   position: absolute;
   top: 0px;
   right: 0px;
@@ -24,8 +27,7 @@
 
 .board-welcome {
   z-index: 2;
-  padding-top: 10px;
-  padding-left: 30px;
+  padding: 5px 30px;
 }
 
 .navbar-dark {

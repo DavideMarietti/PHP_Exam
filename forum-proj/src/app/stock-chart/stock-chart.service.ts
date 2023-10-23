@@ -14,7 +14,7 @@ export class StockChartService {
   constructor(private http: HttpClient) {}
 
   getStockData(symbol: string): Observable<any>{
-    const url = `${this.apiUrl}?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=${this.apiKey}`;
+    const url = `${this.apiUrl}?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${this.apiKey}`;
     return this.http
       .get(
         url,

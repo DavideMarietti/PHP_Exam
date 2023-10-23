@@ -112,6 +112,14 @@ export class ThreadsService {
       .put<Comment>(
         url,
         id_user
+      ).pipe(
+        map(responseData => {
+          return responseData;
+        }),
+        catchError(errorRes => {
+          // Send to analytics server
+          return throwError(errorRes);
+        })
       );
   }
 
@@ -121,15 +129,30 @@ export class ThreadsService {
       .put<Comment>(
         url,
         id_user
+      ).pipe(
+        map(responseData => {
+          return responseData;
+        }),
+        catchError(errorRes => {
+          // Send to analytics server
+          return throwError(errorRes);
+        })
       );
   }
-
   threadLike(id_thr: number, id_user: number){
     const url: string = `http://localhost:3000/api/v1/posts/giveLike.php?id=${id_thr}`;
     return this.http
       .put<Thread>(
         url,
         id_user
+      ).pipe(
+        map(responseData => {
+          return responseData;
+        }),
+        catchError(errorRes => {
+          // Send to analytics server
+          return throwError(errorRes);
+        })
       );
   }
 
@@ -139,6 +162,14 @@ export class ThreadsService {
       .put<Thread>(
         url,
         id_user
+      ).pipe(
+        map(responseData => {
+          return responseData;
+        }),
+        catchError(errorRes => {
+          // Send to analytics server
+          return throwError(errorRes);
+        })
       );
   }
 }

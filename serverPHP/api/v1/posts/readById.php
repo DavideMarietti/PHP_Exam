@@ -13,7 +13,7 @@ $post = new Post($db);
 
 
 $id_toRead = isset($_GET['id']) ? $_GET['id'] : die();
-$post->setAutore($id_toRead);
+$post->setId($id_toRead);
 
 $stmt = $post->readById();
 
