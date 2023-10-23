@@ -22,13 +22,13 @@ if ($stmt) {
 
     foreach ($stmt as $row) {
         $user_obj = array(
-            "id" => $row['id'],
+            "id" => (int)$row['id'],
             "username" => $row['username'],
             "password" => $row['password'],
             "nome" => $row['nome'],
             "cognome" => $row['cognome'],
             "sesso" => $row['sesso'],
-            "eta" => $row['eta'],
+            "eta" => (int)$row['eta'],
             "image" => $row['image'],
             "iscrizione" => $row['iscrizione']
         );

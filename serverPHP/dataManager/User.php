@@ -21,6 +21,8 @@ class User
         $this->conn = $db;
         $this->image = "/assets/images/user.png";
         $this->iscrizione = date("Y-m-d H:i:s");
+        $this->sesso = "him/him";
+        $this->eta = 30;
     }
 
     public function getId()
@@ -224,4 +226,5 @@ class User
         return $stmt;
     }
 }
+
 ?>

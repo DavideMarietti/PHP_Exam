@@ -29,7 +29,7 @@ class Comment
 
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (int)$id;
     }
 
 
@@ -91,41 +91,51 @@ class Comment
         $l = (array)$this->like;
 
         if (in_array($userid, $d)) {
+            //Update dislikes
             $dislikeIndex = array_search($userid, $d);
             unset($d[$dislikeIndex]);
-            // Re-index the array after removing the element
-            //$this->dislike = json_encode($d);
-            $new_l = "[";
+            $new_d = "[";
             $counter = 0;
             foreach ($d as $item) {
-                $new_l = $new_l . $item . ",";
+                $new_d = $new_d . $item . ",";
                 $counter++;
             }
             if ($counter > 0) {
-                $new_l = substr_replace($new_l, "", -1);
+                $new_d = substr_replace($new_d, "", -1);
             }
-            $new_l = $new_l . "]";
-            $this->dislike = $new_l;
-        } else {
-            //$this->dislike = json_encode($d);
-            $new_l = "[";
-            $counter = 0;
-            foreach ($d as $item) {
-                $new_l = $new_l . $item . ",";
-                $counter++;
-            }
-            if ($counter > 0) {
-                $new_l = substr_replace($new_l, "", -1);
-            }
-            $new_l = $new_l . "]";
-            $this->dislike = $new_l;
-        }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
 
-        if (in_array($userid, $l)) {
+            //Update likes
+            $l[] = $userid;
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+        } elseif (in_array($userid, $l)) {
+            //Update dislike
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+
+            //Update likes
             $likeIndex = array_search($userid, $l);
             unset($l[$likeIndex]);
-            // Re-index the array after removing the element
-            //$this->like = json_encode($l);
             $new_l = "[";
             $counter = 0;
             foreach ($l as $item) {
@@ -138,8 +148,21 @@ class Comment
             $new_l = $new_l . "]";
             $this->like = $new_l;
         } else {
+            //Update dislike
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+
+            //Update just likes
             $l[] = $userid;
-            //$this->like = json_encode($l);
             $new_l = "[";
             $counter = 0;
             foreach ($l as $item) {
@@ -154,24 +177,28 @@ class Comment
         }
     }
 
-    public function getDislike()
+    public
+    function getDislike()
     {
         return $this->dislike;
     }
 
-    public function setDislike($dislike)
+    public
+    function setDislike($dislike)
     {
         $this->dislike = $dislike;
     }
 
-    public function giveDislike($userid)
+    public
+    function giveDislike($userid)
     {
         $d = (array)$this->dislike;
         $l = (array)$this->like;
 
         if (in_array($userid, $l)) {
-            $dislikeIndex = array_search($userid, $l);
-            unset($l[$dislikeIndex]);
+            //Update likes
+            $likeIndex = array_search($userid, $l);
+            unset($l[$likeIndex]);
             $new_l = "[";
             $counter = 0;
             foreach ($l as $item) {
@@ -183,39 +210,25 @@ class Comment
             }
             $new_l = $new_l . "]";
             $this->like = $new_l;
-        } else {
-            $new_l = "[";
-            $counter = 0;
-            foreach ($l as $item) {
-                $new_l = $new_l . $item . ",";
-                $counter++;
-            }
-            if ($counter > 0) {
-                $new_l = substr_replace($new_l, "", -1);
-            }
-            $new_l = $new_l . "]";
-            $this->like = $new_l;
-        }
 
-        if (in_array($userid, $d)) {
-            $likeIndex = array_search($userid, $d);
-            unset($d[$likeIndex]);
-            $new_l = "[";
-            $counter = 0;
-            foreach ($d as $item) {
-                $new_l = $new_l . $item . ",";
-                $counter++;
-            }
-            if ($counter > 0) {
-                $new_l = substr_replace($new_l, "", -1);
-            }
-            $new_l = $new_l . "]";
-            $this->dislike = $new_l;
-        } else {
+            //Update dislikes
             $d[] = $userid;
-            $new_l = "[";
+            $new_d = "[";
             $counter = 0;
             foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+        } elseif (in_array($userid, $d)) {
+            //Update like
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
                 $new_l = $new_l . $item . ",";
                 $counter++;
             }
@@ -223,7 +236,49 @@ class Comment
                 $new_l = substr_replace($new_l, "", -1);
             }
             $new_l = $new_l . "]";
-            $this->dislike = $new_l;
+            $this->like = $new_l;
+
+            //Update dislikes
+            $dislikeIndex = array_search($userid, $d);
+            unset($d[$dislikeIndex]);
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+        } else {
+            //Update like
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+
+            //Update just dislikes
+            $d[] = $userid;
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
         }
     }
 
@@ -262,7 +317,7 @@ class Comment
 
     function readById()
     {
-        $query = "SELECT * FROM comments WHERE id = ?";
+        $query = "SELECT * FROM comments WHERE comments.id = ?";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);

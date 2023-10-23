@@ -28,7 +28,7 @@ class Post
 
     public function setId($id_par)
     {
-        $this->id = $id_par;
+        $this->id = (int)$id_par;
     }
 
     public function getTitolo()
@@ -77,10 +77,95 @@ class Post
         $l = (array)$this->like;
 
         if (in_array($userid, $d)) {
+            //Update dislikes
             $dislikeIndex = array_search($userid, $d);
             unset($d[$dislikeIndex]);
-            // Re-index the array after removing the element
-            //$this->dislike = json_encode($d);
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+
+            //Update likes
+            $l[] = $userid;
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+        } elseif (in_array($userid, $l)) {
+            //Update dislike
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+
+            //Update likes
+            $likeIndex = array_search($userid, $l);
+            unset($l[$likeIndex]);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+        } else {
+            //Update dislike
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+
+            //Update just likes
+            $l[] = $userid;
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+        }
+
+        /*
+        if (in_array($userid, $d)) {
+            $dislikeIndex = array_search($userid, $d);
+            unset($d[$dislikeIndex]);
             $new_l = "[";
             $counter = 0;
             foreach ($d as $item) {
@@ -93,7 +178,6 @@ class Post
             $new_l = $new_l . "]";
             $this->dislike = $new_l;
         } else {
-            //$this->dislike = json_encode($d);
             $new_l = "[";
             $counter = 0;
             foreach ($d as $item) {
@@ -110,8 +194,6 @@ class Post
         if (in_array($userid, $l)) {
             $likeIndex = array_search($userid, $l);
             unset($l[$likeIndex]);
-            // Re-index the array after removing the element
-            //$this->like = json_encode($l);
             $new_l = "[";
             $counter = 0;
             foreach ($l as $item) {
@@ -125,7 +207,6 @@ class Post
             $this->like = $new_l;
         } else {
             $l[] = $userid;
-            //$this->like = json_encode($l);
             $new_l = "[";
             $counter = 0;
             foreach ($l as $item) {
@@ -137,24 +218,114 @@ class Post
             }
             $new_l = $new_l . "]";
             $this->like = $new_l;
-        }
+        }*/
     }
 
-    public function getDislike()
+    public
+    function getDislike()
     {
         return $this->dislike;
     }
 
-    public function setDislike($dislike)
+    public
+    function setDislike($dislike)
     {
         $this->dislike = $dislike;
     }
 
-    public function giveDislike($userid)
+    public
+    function giveDislike($userid)
     {
         $d = (array)$this->dislike;
         $l = (array)$this->like;
 
+        if (in_array($userid, $l)) {
+            //Update likes
+            $likeIndex = array_search($userid, $l);
+            unset($l[$likeIndex]);
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+
+            //Update dislikes
+            $d[] = $userid;
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+        } elseif (in_array($userid, $d)) {
+            //Update like
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+
+            //Update dislikes
+            $dislikeIndex = array_search($userid, $d);
+            unset($d[$dislikeIndex]);
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+        } else {
+            //Update like
+            $new_l = "[";
+            $counter = 0;
+            foreach ($l as $item) {
+                $new_l = $new_l . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_l = substr_replace($new_l, "", -1);
+            }
+            $new_l = $new_l . "]";
+            $this->like = $new_l;
+
+            //Update just dislikes
+            $d[] = $userid;
+            $new_d = "[";
+            $counter = 0;
+            foreach ($d as $item) {
+                $new_d = $new_d . $item . ",";
+                $counter++;
+            }
+            if ($counter > 0) {
+                $new_d = substr_replace($new_d, "", -1);
+            }
+            $new_d = $new_d . "]";
+            $this->dislike = $new_d;
+        }
+
+        /*
         if (in_array($userid, $l)) {
             $dislikeIndex = array_search($userid, $l);
             unset($l[$dislikeIndex]);
@@ -210,15 +381,17 @@ class Post
             }
             $new_l = $new_l . "]";
             $this->dislike = $new_l;
-        }
+        }*/
     }
 
-    public function getCreato()
+    public
+    function getCreato()
     {
         return $this->creato;
     }
 
-    public function setCreato($creato)
+    public
+    function setCreato($creato)
     {
         $this->creato = $creato;
     }
@@ -272,7 +445,7 @@ class Post
 
         $stmt->execute();
 
-        return $stmt;
+        return $this;
     }
 
     function updateLikeDislike()

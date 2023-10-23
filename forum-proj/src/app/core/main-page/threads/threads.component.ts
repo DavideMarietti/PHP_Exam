@@ -159,11 +159,14 @@ export class ThreadsComponent implements OnInit, AfterContentInit {
   }
 
   reactionControl(i: any, threadcheck: boolean, reactiontype: boolean) {
+//    console.log(this.threads[i].id, this.user.id)
+
     if(this.control.autenticato){
       //control like of threads
       if(threadcheck && reactiontype){
         lastValueFrom(this.threadService.threadLike(this.threads[i].id, this.user.id)).then(
           thread => {
+            console.log("t: ", thread);
             this.threads[i].like = thread.like;
             this.threads[i].dislike = thread.dislike;
           }
@@ -173,6 +176,8 @@ export class ThreadsComponent implements OnInit, AfterContentInit {
       if(threadcheck && !reactiontype){
         lastValueFrom(this.threadService.threadDislike(this.threads[i].id, this.user.id)).then(
           thread => {
+            console.log("t: ", thread);
+
             this.threads[i].like = thread.like;
             this.threads[i].dislike = thread.dislike;
           }
@@ -182,6 +187,8 @@ export class ThreadsComponent implements OnInit, AfterContentInit {
       if(!threadcheck && reactiontype){
         lastValueFrom(this.threadService.commentLike(this.comments[i].id, this.user.id)).then(
           comment => {
+            console.log("c: ", comment);
+
             this.comments[i].like = comment.like;
             this.comments[i].dislike = comment.dislike;
           }
@@ -191,6 +198,8 @@ export class ThreadsComponent implements OnInit, AfterContentInit {
       if(!threadcheck && !reactiontype){
         lastValueFrom(this.threadService.commentDislike(this.comments[i].id, this.user.id)).then(
           comment => {
+            console.log("c: ", comment);
+
             this.comments[i].like = comment.like;
             this.comments[i].dislike = comment.dislike;
           }

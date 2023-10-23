@@ -1,10 +1,15 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-header("Content-Type: application/json; charset=UTF-8");
-
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+header('Content-Type: application/json');
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method == "OPTIONS") {
+    header('Access-Control-Allow-Origin: *');
+    header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+    header("HTTP/1.1 200 OK");
+    die();
+}
 include_once '../../../dataManager/Database.php';
 include_once '../../../dataManager/Comment.php';
 
@@ -14,7 +19,6 @@ $db = $database->getConnection();
 $comment = new Comment($db);
 
 $data = json_decode(file_get_contents("php://input"));
-var_dump( !empty($data->level));
 
 if (
     !empty($data->testo) &&
@@ -27,9 +31,29 @@ if (
     $comment->setLevel($data->level);
 
     $stmt = $comment->create();
-    if ($stmt) {
-        http_response_code(201);
-        echo json_encode($comment);
+
+    $res = $comment->read();
+
+    if ($res) {
+        $comments_list = array();
+
+        foreach ($res as $row) {
+            $comment_obj = array(
+                "id" => (int)$row['id'],
+                "testo" => $row['testo'],
+                "autore" => $row['autore'],
+                "parentid" => (int)$row['parentid'],
+                "level" => (int)$row['level'],
+                "like" => json_decode($row['like']),
+                "dislike" => json_decode($row['dislike']),
+                "creato" => $row['creato']
+            );
+
+            array_push($comments_list, $comment_obj);
+        }
+
+        http_response_code(200);
+        echo json_encode(end($comments_list));
     } else {
         http_response_code(503);
         echo json_encode(array("message" => "Unable to create the comment"));
